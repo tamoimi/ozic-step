@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Container from "./components/Container";
+import { Box, createTheme, ThemeProvider } from "@mui/material";
 
-function App() {
+const theme = createTheme({
+  palette: {
+    background: {
+      default: "#eeeeee",
+    },
+    primary: {
+      main: "#FF6634",
+    },
+    secondary: {
+      main: "#35BA9B",
+    },
+    success: {
+      main: "#3AADD9",
+    },
+    error: {
+      main: "#D94452",
+    },
+    info: {
+      main: "#DCDCDC",
+    },
+    warning: {
+      main: "#FDCD56",
+    },
+  },
+});
+
+export const FormSample = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <ThemeProvider theme={theme}>
+        <Box
+          sx={{
+            width: "100%",
+            height: 300,
+            background: "#ff6634",
+            p: 3,
+            boxSizing: "border-box",
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Container />
+        </Box>
+      </ThemeProvider>
+    </>
   );
-}
-
-export default App;
+};
