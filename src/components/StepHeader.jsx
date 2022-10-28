@@ -15,12 +15,12 @@ const steps = [
   "계약서 다운로드",
 ];
 
-const StepHeader = () => {
+const StepHeader = ({ currentStep }) => {
   return (
     <>
-      <Paper sx={{ height: 168 }}>
+      <Paper>
         <Box sx={{ width: "100%" }}>
-          <Stepper activeStep={0} alternativeLabel>
+          <Stepper activeStep={currentStep} alternativeLabel>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
