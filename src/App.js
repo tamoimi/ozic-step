@@ -1,6 +1,6 @@
 import React from "react";
-import Container from "./components/Container";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
+import Merchant from "./pages/Merchant";
 
 const theme = createTheme({
   palette: {
@@ -41,7 +41,7 @@ export const FormSample = () => {
             boxSizing: "border-box",
           }}
         >
-          <Container />
+          <Merchant />
         </Box>
       </ThemeProvider>
     </>
