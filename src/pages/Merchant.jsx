@@ -14,18 +14,21 @@ const Merchant = () => {
   return (
     <Stack direction="row" spacing={3}>
       <Navigation />
-      <Grid container spacing={3}>
+      <Grid container>
         {/* stepper activeStep은 0부터 시작하기 때문에 => 현재스텝 -1 */}
         <StepHeader currentStep={currentStep - 1} />
-        {currentStep === 1 ? (
-          <Step1 setCurrentStepProp={setCurrentStep} />
-        ) : currentStep === 2 ? (
-          <Step2 setCurrentStepProp={setCurrentStep} />
-        ) : currentStep === 3 ? (
-          <Step3 setCurrentStepProp={setCurrentStep} />
-        ) : (
-          <Step4 setCurrentStepProp={setCurrentStep} />
-        )}
+
+        <Grid container sx={{ marginTop: "20px" }}>
+          {currentStep === 1 ? (
+            <Step1 setCurrentStepProp={setCurrentStep} />
+          ) : currentStep === 2 ? (
+            <Step2 setCurrentStepProp={setCurrentStep} />
+          ) : currentStep === 3 ? (
+            <Step3 setCurrentStepProp={setCurrentStep} />
+          ) : (
+            <Step4 setCurrentStepProp={setCurrentStep} />
+          )}
+        </Grid>
       </Grid>
     </Stack>
   );
