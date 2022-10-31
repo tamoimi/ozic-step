@@ -4,7 +4,7 @@ import { Paper } from "@mui/material";
 export const Navigation = () => {
   return (
     <>
-      <Paper
+      <Paper 
         sx={{
           width: 240,
           height: 889,
