@@ -13,8 +13,12 @@ const Step3 = ({ setCurrentStepProp }) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const onClick = (data) => {
+    console.log("step5 에서 이전으로 클릭 됨");
+    setCurrentStepProp((prev) => prev - 1);
+  };
   const onSubmit = (data) => {
-    console.log("step3 에서 다음으로 클릭 됨");
+    console.log("step5 에서 다음으로 클릭 됨");
     setCurrentStepProp((prev) => prev + 1);
   };
 
