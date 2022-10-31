@@ -18,8 +18,8 @@ const steps = [
 const StepHeader = ({ currentStep }) => {
   return (
     <>
-      <Paper>
-        <Box sx={{ width: "100%" }}>
+      <Paper sx={{ width: "100%", alignItems: "" }} >
+        <Box>
           <Stepper activeStep={currentStep} alternativeLabel>
             {steps.map((label) => (
               <Step key={label}>
@@ -29,13 +29,6 @@ const StepHeader = ({ currentStep }) => {
           </Stepper>
         </Box>
       </Paper>
-      <style>
-        {`
-    MuiPaper-root{
-      line-height: 168px;
-    }
-  `}
-      </style>
     </>
   );
 };
