@@ -3,7 +3,7 @@ import DaumPostcodeEmbed from "react-daum-postcode";
 import { Modal } from "@mui/material";
 import { Box } from "@mui/system";
 
-const PostCode = ({ openPostCode, setOpenPostCode }) => {
+const PostCode = ({ openPostCode, setOpenPostCode, PostCodeHandler }) => {
   //useState
   const handleClose = () => setOpenPostCode(false);
 
@@ -15,6 +15,7 @@ const PostCode = ({ openPostCode, setOpenPostCode }) => {
         주소: ${data.address},
         우편번호: ${data.zonecode}    
         `);
+      PostCodeHandler(data);
       setOpenPostCode(false);
     },
   };
