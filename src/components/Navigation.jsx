@@ -8,9 +8,10 @@ export const Navigation = () => {
         sx={{
           width: 240,
           height: 889,
+          textAlign: "center"
         }}
       >
-        가맹점 등록 
+        <h2>가맹점 등록</h2> 
       </Paper>
     </>
   );
