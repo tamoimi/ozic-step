@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
 import Merchant from "./pages/Merchant";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const theme = createTheme({
   palette: {
@@ -32,6 +33,7 @@ export const FormSample = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
+        <CssBaseline />
         <Box
           sx={{
             width: "100%",
