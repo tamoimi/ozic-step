@@ -18,8 +18,8 @@ const steps = [
 const StepHeader = ({ currentStep }) => {
   return (
     <>
-      <Paper sx={{ width: "100%", height: 200 }}>
-        <Box sx={{ marginTop: "60px" }}>
+      <Paper sx={{ width: "100%", height: 150, borderRadius: 4, marginTop: 8}}>
+        <Box sx={{ marginTop: "40px" }}>
           <Stepper activeStep={currentStep} alternativeLabel>
             {steps.map((label) => (
               <Step key={label.id}>
