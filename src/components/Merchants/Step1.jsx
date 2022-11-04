@@ -6,17 +6,43 @@ import Typography from "@mui/material/Typography";
 import { Controller, useForm } from "react-hook-form";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Radio } from "@mui/material";
-import { TextField } from "@mui/material";
-import { Stack } from "@mui/system";
+import Radio from "@mui/material/Radio";
+import TextField from "@mui/material/TextField";
+import Stack from "@mui/system/Stack";
 import PostCode from "../PostCode";
 import { useState } from "react";
-import InputMask from "react-input-mask";
-
+import Snackbar from "@mui/material/Snackbar/Snackbar";
+import Close from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
+import Alert from "@mui/material/Alert/Alert";
 
 const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
   // 모달창, 주소api (false)
   const [openPostCode, setOpenPostCode] = useState(false);
+
+  const [snackOpen, setSnackOpen] = useState(false);
+
+  const snackOpenClick = () => {
+    setSnackOpen(true);
+  };
+
+  const snackBarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackOpen(false);
+  };
+
+  const action = (
+    <>
+      <Button color="primary" size="small" onClick={snackBarClose}>
+        닫기
+      </Button>
+      <IconButton size="small" onClick={snackBarClose}>
+        <Close fontSize="small" />
+      </IconButton>
+    </>
+  );
 
   // React-Hook-Form
   const {
@@ -25,15 +51,13 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
     formState: { errors, isDirty, isValid },
     setValue,
     control,
-    value,
-    onChange,
   } = useForm({
     defaultValues: {
       mallName: "",
       businessType: "",
       registrationNumber: "",
       postCode: "",
-      mallAddress: "123",
+      mallAddress: "",
       detailAddress: "",
       phone: "",
       fax: "",
@@ -64,9 +88,10 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
   };
 
   // 인풋에 검색된 주소값 입력
+  // id랑
   const PostCodeHandler = (data) => {
-    setValue("postCode", data.postCode);
-    setValue("mallAddress", data.mallAddress);
+    setValue("postCode", data.zonecode);
+    setValue("mallAddress", data.address);
   };
 
   // setValues로 인풋에 입력된 데이터값 적용
@@ -121,23 +146,26 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
 
             <Stack direction="row" alignItems="center" height="60px">
               <InputLabel sx={{ width: 150 }}>개인/법인 구분</InputLabel>
-              <RadioGroup
-                row
-                {...register("businessType", {
-                  required: "개인/법인 구분 확인은 필수값 입니다.",
-                })}
-              >
-                <FormControlLabel
-                  value="sole"
-                  control={<Radio />}
-                  label="개인"
-                />
-                <FormControlLabel
-                  value="corporation"
-                  control={<Radio />}
-                  label="법인"
-                />
-              </RadioGroup>
+              <Controller
+                name="businessType"
+                control={control}
+                rules={{ required: "개인/법인 구분 확인은 필수값 입니다." }}
+                render={({ field: { value, onChange } }) => (
+                  <RadioGroup row value={value} onChange={onChange}>
+                    <FormControlLabel
+                      value="sole"
+                      control={<Radio />}
+                      label="개인"
+                    />
+                    <FormControlLabel
+                      value="corporation"
+                      control={<Radio />}
+                      label="법인"
+                    />
+                  </RadioGroup>
+                )}
+              />
+
               {errors.businessType && (
                 <span className="errorMessage">
                   {errors.businessType.message}
@@ -150,6 +178,12 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                 사업자등록번호
               </InputLabel>
 
+              <TextField
+                placeholder="12 345 67890"
+                label="사업자등록번호"
+                size="small"
+                {...register("registrationNumber", { required: true })}
+              />
               {/* <Controller
                 name={"registrationNumber"}
                 control={control}
@@ -157,10 +191,8 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                   required: "💥사업자등록번호는 필수값 입니다.",
                 }}
                 error={!!errors.registrationNumber}
-
                 render={({ field: { value, onChange, onBlur } }) => (
                   <InputMask
-                    
                     value={value}
                     mask="99 999 99999"
                     onChange={onChange}
@@ -179,7 +211,6 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                   >
                     <TextField
                       placeholder="12 345 67890"
-                      
                       label="사업자등록번호"
                     />
                   </InputMask>
@@ -213,9 +244,9 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                     size="small"
                     sx={{ width: 200 }}
                     label="우편번호"
-                    error={!!errors.postCode}
                     value={value}
                     onChange={onChange}
+                    error={!!errors.postCode}
                   />
                 )}
               ></Controller>
@@ -234,17 +265,25 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
 
             <Stack direction="row" alignItems="center" height="60px">
               <InputLabel sx={{ width: 150 }}></InputLabel>
-              <TextField
-                id="mallAddress"
+              <Controller
+                name={"mallAddress"}
                 control={control}
-                sx={{ width: 350 }}
-                size="small"
-                label="주소"
-                error={!!errors.mallAddress}
-                {...register("mallAddress", {
+                rules={{
                   required: "주소는 필수값 입니다.",
-                })}
-              />
+                  pattern: {},
+                }}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    size="small"
+                    sx={{ width: 290 }}
+                    label="주소"
+                    value={value}
+                    onChange={onChange}
+                    error={!!errors.mallAddress}
+                  />
+                )}
+              ></Controller>
+
               {errors.mallAddress && (
                 <span className="errorMessage">
                   {errors.mallAddress.message}
@@ -331,15 +370,26 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
               type="button"
               variant="contained"
               sx={{ width: 200, color: "white" }}
+              onClick={snackOpenClick}
             >
               임시저장
             </Button>
-
-            <Button
-              type="submit"
-              variant="outlined"
-              disabled={!isValid || !isDirty}
+            <Snackbar
+              open={snackOpen}
+              autoHideDuration={3000}
+              onClose={snackBarClose}
+              action={action}
             >
+              <Alert
+                onClose={snackBarClose}
+                severity="success"
+                sx={{ width: "100%", background: "#f2f2f2" }}
+              >
+                임시저장이 완료 되었습니다.
+              </Alert>
+            </Snackbar>
+
+            <Button type="submit" variant="outlined" disabled={!isValid}>
               다음 {">"}
             </Button>
           </Stack>
