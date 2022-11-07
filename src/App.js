@@ -1,7 +1,11 @@
 import React from "react";
-import { Box, createTheme, ThemeProvider } from "@mui/material";
+import Box from "@mui/material/Box";
+import { createTheme } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import Merchant from "./pages/Merchant";
 import CssBaseline from "@mui/material/CssBaseline";
+import Stack from "@mui/material/Stack";
+import { Navigation } from "./components/Navigation";
 
 const theme = createTheme({
   palette: {
@@ -43,7 +47,10 @@ export const FormSample = () => {
             boxSizing: "border-box",
           }}
         >
-          <Merchant />
+          <Stack direction="row" spacing={3}>
+            <Navigation />
+            <Merchant />
+          </Stack>
         </Box>
       </ThemeProvider>
     </>
