@@ -1,7 +1,9 @@
 import React from "react";
 import DaumPostcodeEmbed from "react-daum-postcode";
-import { Modal } from "@mui/material";
-import { Box } from "@mui/system";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
 
 const PostCode = ({ openPostCode, setOpenPostCode, PostCodeHandler }) => {
   //useState
@@ -20,6 +22,7 @@ const PostCode = ({ openPostCode, setOpenPostCode, PostCodeHandler }) => {
     },
   };
 
+  //modal style
   const style = {
     position: "absolute",
     top: "50%",
@@ -36,6 +39,11 @@ const PostCode = ({ openPostCode, setOpenPostCode, PostCodeHandler }) => {
     <>
       <Modal open={openPostCode} onClose={handleClose}>
         <Box sx={style}>
+          <Box sx={{ textAlign: "right", marginBottom: 2 }}>
+            <Button onClick={handleClose}>
+              <CloseIcon />
+            </Button>
+          </Box>
           <DaumPostcodeEmbed
             onComplete={handle.selectAddress}
             autoClose={false}
