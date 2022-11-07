@@ -4,11 +4,11 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useForm } from "react-hook-form";
-import { TextField } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import { Stack } from "@mui/system";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment/InputAdornment";
-import { ErrorOutline } from "@mui/icons-material";
+import ErrorOutline from "@mui/icons-material/ErrorOutline";
 import Tooltip from "@mui/material/Tooltip";
 
 const Step2 = ({ setCurrentStepProp }) => {
@@ -31,6 +31,7 @@ const Step2 = ({ setCurrentStepProp }) => {
       <Paper
         sx={{
           width: "100%",
+          height: 650,
           p: 3,
           borderRadius: 4,
           marginTop: 3,
@@ -199,7 +200,7 @@ const Step2 = ({ setCurrentStepProp }) => {
                       <Tooltip
                         title={
                           <Typography variant="subtitle2" fontSize={11}>
-                            비밀번호는 가맹점 사이트 테스트용 비밀번호 입니다.
+                            비밀번호는 보안을 위해 임시저장이 되지 않습니다.
                           </Typography>
                         }
                         placement="right"
@@ -219,7 +220,7 @@ const Step2 = ({ setCurrentStepProp }) => {
           <Stack
             direction="row"
             spacing={3}
-            sx={{ marginTop: 5, justifyContent: "center" }}
+            sx={{ marginTop: 10, justifyContent: "center" }}
           >
             <Button type="submit" variant="outlined" onClick={onClick}>
               {"<"}이전
