@@ -20,6 +20,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
   // 모달창, 주소api (false)
   const [openPostCode, setOpenPostCode] = useState(false);
 
+  // snackBar
   const [snackOpen, setSnackOpen] = useState(false);
 
   const snackOpenClick = () => {
@@ -48,7 +49,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty, isValid },
+    formState: { errors, isValid },
     setValue,
     control,
   } = useForm({
@@ -70,17 +71,17 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
     // 다음단계로 클릭했을 때 한페이지씩 이동
     setCurrentStepProp((prev) => prev + 1);
     // 다음단계에서 이전단계로 돌아왔을때 입력된 데이터값 남겨두기
-    setDataProp((prev) => ({
-      ...prev,
-      mallName: data.mallName,
-      businessType: data.businessType,
-      registrationNumber: data.registrationNumber,
-      postCode: data.postCode,
-      mallAddress: data.mallAddress,
-      detailAddress: data.detailAddress,
-      phone: data.phone,
-      fax: data.fax,
-    }));
+    // setDataProp((prev) => ({
+    //   ...prev,
+    //   mallName: data.mallName,
+    //   businessType: data.businessType,
+    //   registrationNumber: data.registrationNumber,
+    //   postCode: data.postCode,
+    //   mallAddress: data.mallAddress,
+    //   detailAddress: data.detailAddress,
+    //   phone: data.phone,
+    //   fax: data.fax,
+    // }));
   };
 
   const openPostCodeModal = () => {
@@ -95,18 +96,18 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
   };
 
   // setValues로 인풋에 입력된 데이터값 적용
-  useEffect(() => {
-    if (dataProp !== {}) {
-      setValue("mallName", dataProp.mallName);
-      setValue("businessType", dataProp.businessType);
-      setValue("registrationNumber", dataProp.registrationNumber);
-      setValue("postCode", dataProp.postCode);
-      setValue("mallAddress", dataProp.mallAddress);
-      setValue("detailAddress", dataProp.detailAddress);
-      setValue("phone", dataProp.phone);
-      setValue("fax", dataProp.fax);
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (dataProp !== {}) {
+  //     setValue("mallName", dataProp.mallName);
+  //     setValue("businessType", dataProp.businessType);
+  //     setValue("registrationNumber", dataProp.registrationNumber);
+  //     setValue("postCode", dataProp.postCode);
+  //     setValue("mallAddress", dataProp.mallAddress);
+  //     setValue("detailAddress", dataProp.detailAddress);
+  //     setValue("phone", dataProp.phone);
+  //     setValue("fax", dataProp.fax);
+  //   }
+  // }, []);
 
   return (
     <>
@@ -116,6 +117,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
           p: 3,
           borderRadius: 4,
           marginTop: 3,
+          height: 650,
         }}
       >
         <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
