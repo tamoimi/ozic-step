@@ -1,22 +1,33 @@
-import React from "react"; // eslint-disable-line no-unused-vars
+import React, { useState } from "react"; // eslint-disable-line no-unused-vars
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import { Stack } from "@mui/system";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment/InputAdornment";
 import ErrorOutline from "@mui/icons-material/ErrorOutline";
 import Tooltip from "@mui/material/Tooltip";
+import Chip from "@mui/material/Chip";
+import { Alert } from "@mui/material";
 
 const Step2 = ({ setCurrentStepProp }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty },
-  } = useForm();
+    control,
+    setValue,
+    getValues,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      business: "",
+    },
+  });
+
   const onSubmit = (data) => {
     console.log("step2 에서 다음으로 클릭 됨");
     setCurrentStepProp((prev) => prev + 1);
@@ -24,6 +35,40 @@ const Step2 = ({ setCurrentStepProp }) => {
   const onClick = (data) => {
     console.log("step2에서 이전으로 클릭 됨");
     setCurrentStepProp((prev) => prev - 1);
+  };
+
+  //dynamic list - 업종
+  const [businessList, setBusinessList] = useState([]);
+
+  //add list
+  const addList = () => {
+    if (businessList.length > 4) {
+      alert("5개면 충분");
+      setValue("business", "");
+      return;
+    }
+
+    const businessValue = getValues("business");
+    if (businessValue.trim() === "") return;
+    setBusinessList((prev) => [...prev, businessValue]);
+    setValue("business", "");
+  };
+
+  //delete list
+  const deleteItem = (index) => {
+    let temp = businessList.filter((item, i) => i !== index);
+    setBusinessList(temp);
+  };
+  //validBusiness check
+  const validBusiness = () => {
+    return businessList.length > 0;
+  };
+
+  //keyPress
+  const handleOnKeyPress = (e) => {
+    if (e.key === "Enter") {
+      addList();
+    }
   };
 
   return (
@@ -34,51 +79,111 @@ const Step2 = ({ setCurrentStepProp }) => {
           height: 650,
           p: 3,
           borderRadius: 4,
-          marginTop: 3,
+          mt: 3,
         }}
       >
         <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
           세부 정보 입력
         </Typography>
         <hr />
+
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack sx={{ marginTop: "20px" }}>
-            <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="business" sx={{ width: 150 }}>
+          {/* 세부 정보 입력폼 Stack */}
+          <Stack sx={{ mt: "20px" }}>
+            <Stack direction="row" alignItems="center">
+              <InputLabel
+                htmlFor="business"
+                sx={{ width: 150, fontWeight: "bold", color: "black" }}
+              >
                 업종
               </InputLabel>
-              <TextField
-                id="business"
-                label="업종"
-                size="small"
-                error={!!errors.business}
-                helperText={errors.business ? errors.business.message : ""}
-                {...register("business", {
-                  required: "업종은 필수값 입니다.",
-                })}
-              />
-              <br />
-            </Stack>
-            <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="businessStatus" sx={{ width: 150 }}>
-                업태
-              </InputLabel>
-              <TextField
-                id="businessStatus"
-                label="업태"
-                size="small"
-                error={!!errors.businessStatus}
-                helperText={
-                  errors.businessStatus ? errors.businessStatus.message : ""
-                }
-                {...register("businessStatus", {
-                  required: "업태는 필수값 입니다.",
-                })}
-              />
+              <Controller
+                name={"business"}
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    label="업종"
+                    size="small"
+                    value={value}
+                    onChange={onChange}
+                    error={!!errors.business}
+                    onKeyPress={handleOnKeyPress}
+                  />
+                )}
+              ></Controller>
+              <Button onClick={addList}> 추가</Button>
               <br />
             </Stack>
 
-            <Stack direction="row" alignItems="center" height="60px">
+            <Stack direction="row" alignItems="center">
+              <InputLabel htmlFor="business" sx={{ width: 150 }}>
+                {/* 업종리스트 */}
+              </InputLabel>
+              <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+                {businessList.length > 0 &&
+                  businessList.map((item, i) => (
+                    <Chip
+                      key={i}
+                      label={item}
+                      sx={{ mb: 1, mb: 2 }}
+                      size="small"
+                      variant="outlined"
+                      onDelete={() => deleteItem(i)}
+                    ></Chip>
+                  ))}
+              </Stack>
+              <br />
+            </Stack>
+
+            <Stack direction="row" alignItems="center">
+              <InputLabel htmlFor="business" sx={{ width: 150 }}>
+                업태
+              </InputLabel>
+              <Controller
+                name={"business"}
+                // businessStatus
+                control={control}
+                render={({ field: { value, onChange } }) => (
+                  <TextField
+                    label="업태"
+                    size="small"
+                    value={value}
+                    onChange={onChange}
+                    error={!!errors.business}
+                    onKeyPress={handleOnKeyPress}
+                  />
+                )}
+              ></Controller>
+              <Button onClick={addList}> 추가</Button>
+              <br />
+            </Stack>
+
+            <Stack direction="row" alignItems="center">
+              <InputLabel htmlFor="business" sx={{ width: 150 }}>
+                {/* 업태리스트 */}
+              </InputLabel>
+              <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
+                {businessList.length > 0 &&
+                  businessList.map((item, i) => (
+                    <Chip
+                      key={i}
+                      label={item}
+                      sx={{ mb: 1, mb: 2.5 }}
+                      size="small"
+                      variant="outlined"
+                      onDelete={() => deleteItem(i)}
+                    ></Chip>
+                  ))}
+              </Stack>
+              <br />
+            </Stack>
+
+            <Stack
+              direction="row"
+              alignItems="center"
+              height="40px"
+              sx={{ mb: 1.5 }}
+            >
               <InputLabel htmlFor="businessNum" sx={{ width: 150 }}>
                 통신판매번호
               </InputLabel>
@@ -217,12 +322,13 @@ const Step2 = ({ setCurrentStepProp }) => {
             </Stack>
           </Stack>
 
+          {/* 버튼 Stack */}
           <Stack
             direction="row"
             spacing={3}
-            sx={{ marginTop: 10, justifyContent: "center" }}
+            sx={{ justifyContent: "center", mt: 5 }}
           >
-            <Button type="submit" variant="outlined" onClick={onClick}>
+            <Button type="submit" variant="outlined" onClick={onClick} disabled>
               {"<"}이전
             </Button>
             <Button
@@ -230,6 +336,7 @@ const Step2 = ({ setCurrentStepProp }) => {
               variant="contained"
               sx={{ width: 200, color: "white" }}
               onClick={onClick}
+              disabled
             >
               임시저장
             </Button>
@@ -237,7 +344,7 @@ const Step2 = ({ setCurrentStepProp }) => {
             <Button
               type="submit"
               variant="outlined"
-              disabled={!isDirty}
+              disabled={!isValid || !validBusiness()}
               onClick={onSubmit}
             >
               다음 {">"}
@@ -251,6 +358,9 @@ const Step2 = ({ setCurrentStepProp }) => {
         }
         .css-1f1m77v-MuiInputBase-root-MuiOutlinedInput-root {
           padding-right: 0;
+        }
+        .MuiStack-root css-ymblet-MuiStack-root {
+          height: 0;
         }
       `}</style>
     </>
