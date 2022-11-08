@@ -127,7 +127,10 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack sx={{ marginTop: "20px" }}>
             <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="mallName" sx={{ width: 150 }}>
+              <InputLabel
+                htmlFor="mallName"
+                sx={{ width: 150, fontWeight: "bold", color: "black" }}
+              >
                 가맹점
               </InputLabel>
               <TextField
@@ -135,6 +138,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                 type="text"
                 label="가맹점 이름"
                 size="small"
+                sx={{ width: 250 }}
                 error={!!errors.mallName}
                 {...register("mallName", {
                   required: "가맹점 이름은 필수값 입니다.",
@@ -147,7 +151,11 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
             </Stack>
 
             <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel sx={{ width: 150 }}>개인/법인 구분</InputLabel>
+              <InputLabel
+                sx={{ width: 150, fontWeight: "bold", color: "black" }}
+              >
+                개인/법인 구분
+              </InputLabel>
               <Controller
                 name="businessType"
                 control={control}
@@ -158,11 +166,13 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                       value="sole"
                       control={<Radio />}
                       label="개인"
+                      sx={{ width: 100 }}
                     />
                     <FormControlLabel
                       value="corporation"
                       control={<Radio />}
                       label="법인"
+                      sx={{ width: 100 }}
                     />
                   </RadioGroup>
                 )}
@@ -176,49 +186,30 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
             </Stack>
 
             <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="registrationNumber" sx={{ width: 150 }}>
+              <InputLabel
+                htmlFor="registrationNumber"
+                sx={{ width: 150, fontWeight: "bold", color: "black" }}
+              >
                 사업자등록번호
               </InputLabel>
 
               <TextField
-                placeholder="12 345 67890"
+                placeholder="등록번호 10자리 입력해주세요."
                 label="사업자등록번호"
                 size="small"
-                {...register("registrationNumber", { required: true })}
+                sx={{ width: 250 }}
+                {...register("registrationNumber", {
+                  required: "사업자등록번호는 필수값 입니다.",
+                  pattern: {
+                    value: /^[0-9]+$/,
+                    message: "숫자만 입력해 주세요.",
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: "사업자등록번호 10자리를 입력해주세요.",
+                  },
+                })}
               />
-              {/* <Controller
-                name={"registrationNumber"}
-                control={control}
-                rules={{
-                  required: "💥사업자등록번호는 필수값 입니다.",
-                }}
-                error={!!errors.registrationNumber}
-                render={({ field: { value, onChange, onBlur } }) => (
-                  <InputMask
-                    value={value}
-                    mask="99 999 99999"
-                    onChange={onChange}
-                    // onBlur={(event) => {
-                    //   console.log(event.target.value);
-                    //   return event.target.value.replace(
-                    //     /(\d{2})(\d{3})(\d{2})/,
-                    //     "$1-$2-$3"
-                    //   );
-                    // }}
-
-                    // InputProps={{
-                    //   inputComponent: () => <InputMask mask="99 999 99999" />,
-                    // }}
-                    size="small"
-                  >
-                    <TextField
-                      placeholder="12 345 67890"
-                      label="사업자등록번호"
-                    />
-                  </InputMask>
-                )}
-              /> */}
-
               {errors.registrationNumber && (
                 <span className="errorMessage">
                   {errors.registrationNumber.message}
@@ -227,7 +218,10 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
             </Stack>
 
             <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="postCode" sx={{ width: 150 }}>
+              <InputLabel
+                htmlFor="postCode"
+                sx={{ width: 150, fontWeight: "bold", color: "black" }}
+              >
                 가맹점 주소
               </InputLabel>
 
@@ -244,7 +238,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                 render={({ field: { value, onChange } }) => (
                   <TextField
                     size="small"
-                    sx={{ width: 200 }}
+                    sx={{ width: 250 }}
                     label="우편번호"
                     value={value}
                     onChange={onChange}
@@ -254,7 +248,12 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
               ></Controller>
 
               <Button
-                sx={{ color: "black", background: "#eee", marginLeft: "20px" }}
+                sx={{
+                  color: "black",
+                  background: "#eee",
+                  marginLeft: "15px",
+                  p: "7px 20px",
+                }}
                 onClick={openPostCodeModal}
               >
                 우편번호
@@ -277,7 +276,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                 render={({ field: { value, onChange } }) => (
                   <TextField
                     size="small"
-                    sx={{ width: 290 }}
+                    sx={{ width: 360 }}
                     label="주소"
                     value={value}
                     onChange={onChange}
@@ -297,7 +296,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
               <InputLabel sx={{ width: 150 }}></InputLabel>
               <TextField
                 id="detailAddress"
-                sx={{ width: 350 }}
+                sx={{ width: 360 }}
                 size="small"
                 label="상세주소"
                 error={!!errors.detailAddress}
@@ -319,13 +318,17 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
             />
 
             <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="phone" sx={{ width: 150 }}>
+              <InputLabel
+                htmlFor="phone"
+                sx={{ width: 150, fontWeight: "bold", color: "black" }}
+              >
                 가맹점 전화번호
               </InputLabel>
               <TextField
                 id="phone"
                 label="전화번호"
                 size="small"
+                sx={{ width: 250 }}
                 error={!!errors.phone}
                 {...register("phone", {
                   required: "전화번호는 필수값 입니다.",
@@ -341,13 +344,17 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
             </Stack>
 
             <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="fax" sx={{ width: 150 }}>
+              <InputLabel
+                htmlFor="fax"
+                sx={{ width: 150, fontWeight: "bold", color: "black" }}
+              >
                 가맹점 팩스번호
               </InputLabel>
               <TextField
                 id="fax"
                 label="팩스번호"
                 size="small"
+                sx={{ width: 250 }}
                 error={!!errors.fax}
                 {...register("fax", {
                   required: "팩스번호는 필수값 입니다.",
