@@ -26,7 +26,9 @@ const StepHeader = ({ currentStep }) => {
               <Step key={label.id}>
                 <StepLabel>
                   <Typography>{label.id}</Typography>
-                  <Typography>{label.title}</Typography>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    {label.title}
+                  </Typography>
                 </StepLabel>
               </Step>
             ))}
