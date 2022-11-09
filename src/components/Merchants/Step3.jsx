@@ -1,25 +1,95 @@
-import React from "react"; // eslint-disable-line no-unused-vars
-import { Button, Paper, Typography } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { RadioGroup } from "@mui/material";
-import { FormControlLabel } from "@mui/material";
-import { Radio } from "@mui/material";
-import { TextField } from "@mui/material";
+import React, { useState } from "react"; // eslint-disable-line no-unused-vars
+import InputLabel from "@mui/material/InputLabel";
+import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import { Controller, useForm } from "react-hook-form";
+import TextField from "@mui/material/TextField";
 import { Stack } from "@mui/system";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment/InputAdornment";
+import ErrorOutline from "@mui/icons-material/ErrorOutline";
+import Tooltip from "@mui/material/Tooltip";
+import Chip from "@mui/material/Chip";
 
 const Step3 = ({ setCurrentStepProp }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm();
+    control,
+    setValue,
+    getValues,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      merchantCategory: "",
+      businessConditions: "",
+    },
+  });
+
   const onSubmit = (data) => {
-    console.log("step3 에서 다음으로 클릭 됨");
+    console.log("step3 에서 다음으로 클릭 됨", "data", data);
     setCurrentStepProp((prev) => prev + 1);
   };
   const onClick = (data) => {
-    console.log("step3에서 이전으로 클릭 됨");
+    console.log("step3 에서 이전으로 클릭 됨");
     setCurrentStepProp((prev) => prev - 1);
+  };
+
+  //dynamic list - 업종
+  const [businessList, setBusinessList] = useState([]);
+  const [businessStatus, setBusinesStatus] = useState([]);
+
+  //add list - 업종
+  const addList = () => {
+    if (businessList.length > 4) {
+      alert("5개면 충분");
+      setValue("merchantCategory", "");
+      return;
+    }
+
+    const businessValue = getValues("merchantCategory");
+    if (businessValue.trim() === "") return;
+    setBusinessList((prev) => [...prev, businessValue]);
+    setValue("merchantCategory", "");
+  };
+
+  //add list - 업태
+  const add = () => {
+    if (businessStatus.length > 4) {
+      alert("5개면 충분");
+      setValue("businessConditions", "");
+      return;
+    }
+
+    const businessStatusValue = getValues("businessConditions");
+    if (businessStatusValue.trim() === "") return;
+    setBusinesStatus((prev) => [...prev, businessStatusValue]);
+    setValue("businessConditions", "");
+  };
+
+  //delete list
+  const deleteItem = (index) => {
+    let temp = businessList.filter((item, i) => i !== index);
+    setBusinessList(temp);
+  };
+  //validBusiness check
+  const validBusiness = () => {
+    return businessList.length > 0;
+  };
+
+  //keyPress - 업종
+  const handleOnKeyPress = (e) => {
+    if (e.key === "Enter") {
+      addList();
+    }
+  };
+  //keyPress - 업태
+  const handleOnKeyPressA = (e) => {
+    if (e.key === "Enter") {
+      add();
+    }
   };
 
   return (
@@ -27,120 +97,127 @@ const Step3 = ({ setCurrentStepProp }) => {
       <Paper
         sx={{
           width: "100%",
-          boxSizing: "border-box",
+          height: 650,
           p: 3,
+          borderRadius: 4,
+          mt: 3,
         }}
       >
-        <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-          step 3 은행 정보 입력
+        <Typography sx={{ fontWeight: "bold", fontSize: "16px", mb: 3 }}>
+          은행 정보 입력
         </Typography>
         <hr />
+
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing={3}>
-            <Stack direction="row">
-              <label>가맹점</label>
+          {/* 세부 정보 입력폼 Stack */}
+          <Stack sx={{ mt: "20px" }}>
+            <Stack direction="row" alignItems="center" height="60px">
+              <InputLabel htmlFor="mallIp" sx={{ width: 150, color: "black" }}>
+                은행명
+              </InputLabel>
+              {/* SELECT BOX */}
               <TextField
-                id="franchisee-id"
-                label="가맹점"
-                variant="outlined"
-                color="primary"
-                {...register("franchisee")}
+                id="mallIp"
+                label="가맹점 IP"
+                size="small"
+                sx={{ width: 250 }}
+                error={!!errors.mallIp}
+                helperText={errors.mallIp ? errors.mallIp.message : ""}
+                {...register("mallIp", {
+                  required: "가맹점 IP 는 필수값 입니다.",
+                })}
               />
-              {errors.franchisee && <span>This field is required</span>} <br />
+              {errors.mallIp && (
+                <span className="errorMessage">{errors.mallIp.message}</span>
+              )}
             </Stack>
-
-            <Stack direction="row">
-              <label>개인/법인 구분</label>
-              <RadioGroup row>
-                <FormControlLabel
-                  value="sole"
-                  control={<Radio color="primary" />}
-                  label="개인"
-                  {...register("sole")}
-                />
-                <FormControlLabel
-                  value="corporation"
-                  control={<Radio color="primary" />}
-                  label="법인"
-                  {...register("corporation")}
-                />
-              </RadioGroup>
-            </Stack>
-
-            <Stack direction="row">
-              <label>사업자등록번호</label>
+            <Stack direction="row" alignItems="center" height="60px">
+              <InputLabel htmlFor="testId" sx={{ width: 150, color: "black" }}>
+                은행 계좌번호
+              </InputLabel>
               <TextField
-                id="registNum-id"
-                label="사업자등록번호"
-                variant="outlined"
-                type="number"
-                color="primary"
-                {...register("registNum")}
+                id="testId"
+                label="테스트용 ID"
+                size="small"
+                sx={{ width: 250 }}
+                error={!!errors.testId}
+                {...register("testId", {
+                  required: "테스트용 ID 는 필수값 입니다.",
+                })}
               />
-              {errors.registNum && <span>꼭 필요!</span>} <br />
+              {errors.testId && (
+                <span className="errorMessage">{errors.testId.message}</span>
+              )}
             </Stack>
-
-            <Stack direction="row">
-              <label>가맹점 주소</label>
+            <Stack direction="row" alignItems="center" height="60px">
+              <InputLabel
+                htmlFor="testPassword"
+                sx={{ width: 150, color: "black" }}
+              >
+                계좌 소유주 
+              </InputLabel>
               <TextField
-                id="franchiseeAd-id"
-                label="가맹점주소"
-                variant="outlined"
-                color="primary"
-                {...register("franchiseeAd")}
+                id="testPassword"
+                label="가맹점 비밀번호"
+                size="small"
+                sx={{ width: 250 }}
+                error={!!errors.testPassword}
+                {...register("testPassword", {
+                  required: "가맹점 IP 는 필수값 입니다.",
+                })}
               />
-              {errors.franchisee && <span>This field is required</span>} <br />
-            </Stack>
-
-            <Stack direction="row">
-              <label>가맹점 전화번호</label>
-              <TextField
-                id="franchiseeNum-id"
-                label="전화번호"
-                variant="outlined"
-                type="number"
-                color="primary"
-                {...register("franchiseeNum")}
-              />
-              {errors.franchisee && <span>This field is required</span>} <br />
-            </Stack>
-
-            <Stack direction="row">
-              <label>가맹점 팩스번호</label>
-              <TextField
-                id="franchiseeFaxNum-id"
-                label="팩스번호"
-                variant="outlined"
-                type="number"
-                color="primary"
-                {...register("franchiseeFaxNum")}
-              />
-              {errors.franchisee && <span>This field is required</span>} <br />
+              {errors.testPassword && (
+                <span className="errorMessage">
+                  {errors.testPassword.message}
+                </span>
+              )}
             </Stack>
           </Stack>
 
-          <Stack direction="row" spacing={3} sx={{ marginTop: 3 }}>
-            <Button onClick={onClick} variant="outlined">
+          {/* 버튼 Stack */}
+          <Stack
+            direction="row"
+            spacing={3}
+            sx={{ justifyContent: "center", mt: 3 }}
+          >
+            <Button type="submit" variant="outlined" onClick={onClick} disabled>
               {"<"}이전
             </Button>
-            <Button type="submit" variant="contained" sx={{ color: "white" }}>
+            <Button
+              type="button"
+              variant="contained"
+              sx={{ width: 200, color: "white" }}
+              onClick={onClick}
+              disabled
+            >
               임시저장
             </Button>
-            <Button type="submit" variant="outlined">
+
+            <Button
+              type="submit"
+              variant="outlined"
+              disabled={!isValid || !validBusiness()}
+            >
               다음 {">"}
             </Button>
           </Stack>
         </form>
       </Paper>
       <style>{`
-          label {
-            width: 150px;
-          }
-          input::-webkit-outer-spin-button,
-          input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-          }
+        * {
+          font-size: 14px;
+        }
+        .css-1f1m77v-MuiInputBase-root-MuiOutlinedInput-root {
+          padding-right: 0;
+        }
+        .MuiStack-root css-ymblet-MuiStack-root {
+          height: 0;
+        }
+        .errorMessage {
+          color: #d94452;
+          margin-left: 10px;
+          font-size: 12px;
+        }
       `}</style>
     </>
   );
