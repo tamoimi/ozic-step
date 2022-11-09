@@ -11,7 +11,6 @@ import InputAdornment from "@mui/material/InputAdornment/InputAdornment";
 import ErrorOutline from "@mui/icons-material/ErrorOutline";
 import Tooltip from "@mui/material/Tooltip";
 import Chip from "@mui/material/Chip";
-import { Alert } from "@mui/material";
 
 const Step2 = ({ setCurrentStepProp }) => {
   const {
@@ -24,12 +23,13 @@ const Step2 = ({ setCurrentStepProp }) => {
   } = useForm({
     mode: "onChange",
     defaultValues: {
-      business: "",
+      merchantCategory: "",
+      businessConditions: "",
     },
   });
 
   const onSubmit = (data) => {
-    console.log("step2 에서 다음으로 클릭 됨");
+    console.log("step2 에서 다음으로 클릭 됨", "data", data);
     setCurrentStepProp((prev) => prev + 1);
   };
   const onClick = (data) => {
@@ -39,35 +39,61 @@ const Step2 = ({ setCurrentStepProp }) => {
 
   //dynamic list - 업종
   const [businessList, setBusinessList] = useState([]);
+  const [businessStatus, setBusinesStatus] = useState([]);
 
-  //add list
+  //add list - 업종
   const addList = () => {
     if (businessList.length > 4) {
       alert("5개면 충분");
-      setValue("business", "");
+      setValue("merchantCategory", "");
       return;
     }
-
-    const businessValue = getValues("business");
+    const businessValue = getValues("merchantCategory");
     if (businessValue.trim() === "") return;
     setBusinessList((prev) => [...prev, businessValue]);
-    setValue("business", "");
+    setValue("merchantCategory", "");
   };
-
-  //delete list
+  //delete list - 업종
   const deleteItem = (index) => {
     let temp = businessList.filter((item, i) => i !== index);
     setBusinessList(temp);
   };
-  //validBusiness check
+  //validBusiness check - 업종
   const validBusiness = () => {
     return businessList.length > 0;
   };
-
-  //keyPress
+  //keyPress - 업종
   const handleOnKeyPress = (e) => {
     if (e.key === "Enter") {
       addList();
+    }
+  };
+
+  //add list - 업태
+  const add = () => {
+    if (businessStatus.length > 4) {
+      alert("5개면 충분");
+      setValue("businessConditions", "");
+      return;
+    }
+    const businessStatusValue = getValues("businessConditions");
+    if (businessStatusValue.trim() === "") return;
+    setBusinesStatus((prev) => [...prev, businessStatusValue]);
+    setValue("businessConditions", "");
+  };
+  //delete list - 업태
+  const deleteStatus = (index) => {
+    let temp = businessStatus.filter((item, i) => i !== index);
+    setBusinesStatus(temp);
+  };
+  //validStatus check - 업태
+  const validStatus = () => {
+    return businessStatus.length > 0;
+  };
+  //keyPress - 업태
+  const handleOnKeyPressA = (e) => {
+    if (e.key === "Enter") {
+      add();
     }
   };
 
@@ -82,7 +108,7 @@ const Step2 = ({ setCurrentStepProp }) => {
           mt: 3,
         }}
       >
-        <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+        <Typography sx={{ fontWeight: "bold", fontSize: "16px", mb: 3 }}>
           세부 정보 입력
         </Typography>
         <hr />
@@ -92,21 +118,22 @@ const Step2 = ({ setCurrentStepProp }) => {
           <Stack sx={{ mt: "20px" }}>
             <Stack direction="row" alignItems="center">
               <InputLabel
-                htmlFor="business"
-                sx={{ width: 150, fontWeight: "bold", color: "black" }}
+                htmlFor="merchantCategory"
+                sx={{ width: 150, color: "black" }}
               >
                 업종
               </InputLabel>
               <Controller
-                name={"business"}
+                name={"merchantCategory"}
                 control={control}
                 render={({ field: { value, onChange } }) => (
                   <TextField
                     label="업종"
                     size="small"
+                    sx={{ width: 250 }}
                     value={value}
                     onChange={onChange}
-                    error={!!errors.business}
+                    error={!!errors.merchantCategory}
                     onKeyPress={handleOnKeyPress}
                   />
                 )}
@@ -116,16 +143,14 @@ const Step2 = ({ setCurrentStepProp }) => {
             </Stack>
 
             <Stack direction="row" alignItems="center">
-              <InputLabel htmlFor="business" sx={{ width: 150 }}>
-                {/* 업종리스트 */}
-              </InputLabel>
+              <InputLabel sx={{ width: 150 }}>{/* 업종리스트 */}</InputLabel>
               <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
                 {businessList.length > 0 &&
                   businessList.map((item, i) => (
                     <Chip
                       key={i}
                       label={item}
-                      sx={{ mb: 1, mb: 2 }}
+                      sx={{ mb: 2 }}
                       size="small"
                       variant="outlined"
                       onDelete={() => deleteItem(i)}
@@ -136,42 +161,43 @@ const Step2 = ({ setCurrentStepProp }) => {
             </Stack>
 
             <Stack direction="row" alignItems="center">
-              <InputLabel htmlFor="business" sx={{ width: 150 }}>
+              <InputLabel
+                htmlFor="businessConditions"
+                sx={{ width: 150, color: "black" }}
+              >
                 업태
               </InputLabel>
               <Controller
-                name={"business"}
-                // businessStatus
+                name={"businessConditions"}
                 control={control}
                 render={({ field: { value, onChange } }) => (
                   <TextField
                     label="업태"
                     size="small"
+                    sx={{ width: 250 }}
                     value={value}
                     onChange={onChange}
-                    error={!!errors.business}
-                    onKeyPress={handleOnKeyPress}
+                    error={!!errors.businessConditions}
+                    onKeyPress={handleOnKeyPressA}
                   />
                 )}
               ></Controller>
-              <Button onClick={addList}> 추가</Button>
+              <Button onClick={add}> 추가</Button>
               <br />
             </Stack>
 
             <Stack direction="row" alignItems="center">
-              <InputLabel htmlFor="business" sx={{ width: 150 }}>
-                {/* 업태리스트 */}
-              </InputLabel>
+              <InputLabel sx={{ width: 150 }}>{/* 업태리스트 */}</InputLabel>
               <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-                {businessList.length > 0 &&
-                  businessList.map((item, i) => (
+                {businessStatus.length > 0 &&
+                  businessStatus.map((item, i) => (
                     <Chip
                       key={i}
                       label={item}
-                      sx={{ mb: 1, mb: 2.5 }}
+                      sx={{ mb: 2.5 }}
                       size="small"
                       variant="outlined"
-                      onDelete={() => deleteItem(i)}
+                      onDelete={() => deleteStatus(i)}
                     ></Chip>
                   ))}
               </Stack>
@@ -184,18 +210,19 @@ const Step2 = ({ setCurrentStepProp }) => {
               height="40px"
               sx={{ mb: 1.5 }}
             >
-              <InputLabel htmlFor="businessNum" sx={{ width: 150 }}>
+              <InputLabel
+                htmlFor="mailOrderSalesNumber"
+                sx={{ width: 150, color: "black" }}
+              >
                 통신판매번호
               </InputLabel>
               <TextField
-                id="businessNum"
+                id="mailOrderSalesNumber"
                 label="통신판매번호"
                 size="small"
-                error={!!errors.businessNum}
-                helperText={
-                  errors.businessNum ? errors.businessNum.message : ""
-                }
-                {...register("businessNum", {
+                sx={{ width: 250 }}
+                error={!!errors.mailOrderSalesNumber}
+                {...register("mailOrderSalesNumber", {
                   required: "통신판매번호는 필수값 입니다.",
                   pattern: {
                     value: /^[0-9]+$/,
@@ -203,64 +230,63 @@ const Step2 = ({ setCurrentStepProp }) => {
                   },
                 })}
               />
+              {errors.mailOrderSalesNumber && (
+                <span className="errorMessage">
+                  {errors.mailOrderSalesNumber.message}
+                </span>
+              )}
             </Stack>
 
             <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="franchiseeUrl" sx={{ width: 150 }}>
+              <InputLabel htmlFor="mallUrl" sx={{ width: 150, color: "black" }}>
                 가맹점 URL
               </InputLabel>
               <TextField
-                id="franchiseeUrl"
+                id="mallUrl"
                 label="가맹점 URL"
                 size="small"
-                error={!!errors.franchiseeUrl}
-                helperText={
-                  errors.franchiseeUrl ? errors.franchiseeUrl.message : ""
-                }
-                {...register("franchiseeUrl", {
+                sx={{ width: 250 }}
+                error={!!errors.mallUrl}
+                {...register("mallUrl", {
                   required: "가맹점 URL 필수값 입니다.",
-                  pattern: {
-                    // 주소 패턴 찾아보기
-                  },
                 })}
               />
             </Stack>
 
             <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="franchiseeIp" sx={{ width: 150 }}>
+              <InputLabel htmlFor="mallIp" sx={{ width: 150, color: "black" }}>
                 가맹점 IP
               </InputLabel>
               <TextField
-                id="franchiseeIp"
+                id="mallIp"
                 label="가맹점 IP"
                 size="small"
-                error={!!errors.franchiseeIp}
-                helperText={
-                  errors.franchiseeIp ? errors.franchiseeIp.message : ""
-                }
-                {...register("franchiseeIp", {
+                sx={{ width: 250 }}
+                error={!!errors.mallIp}
+                helperText={errors.mallIp ? errors.mallIp.message : ""}
+                {...register("mallIp", {
                   required: "가맹점 IP 는 필수값 입니다.",
-                  pattern: {
-                    // 숫자 + . 만 가능한 패턴 찾아보기
-                  },
                 })}
               />
+              {errors.mallIp && (
+                <span className="errorMessage">{errors.mallIp.message}</span>
+              )}
             </Stack>
             <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="testId" sx={{ width: 150 }}>
-                테스트용 ID <br /> (카드사 심사용)
+              <InputLabel htmlFor="testId" sx={{ width: 150, color: "black" }}>
+                테스트용 ID
+                <Typography sx={{ fontSize: "12px", color: "gray" }}>
+                  (카드사 심사용)
+                </Typography>
               </InputLabel>
               <TextField
                 id="testId"
                 label="테스트용 ID"
                 size="small"
+                sx={{ width: 250 }}
                 error={!!errors.testId}
-                helperText={errors.testId ? errors.testId.message : ""}
                 {...register("testId", {
                   required: "테스트용 ID 는 필수값 입니다.",
-                  pattern: {
-                    // 영 + 숫자만 NO 특수문자
-                  },
                 })}
                 InputProps={{
                   endAdornment: (
@@ -282,22 +308,28 @@ const Step2 = ({ setCurrentStepProp }) => {
                   ),
                 }}
               />
+              {errors.testId && (
+                <span className="errorMessage">{errors.testId.message}</span>
+              )}
             </Stack>
             <Stack direction="row" alignItems="center" height="60px">
-              <InputLabel htmlFor="testPw" sx={{ width: 150 }}>
-                테스트용 비밀번호 <br /> (카드사 심사용)
+              <InputLabel
+                htmlFor="testPassword"
+                sx={{ width: 150, color: "black" }}
+              >
+                테스트용 비밀번호
+                <Typography sx={{ fontSize: "12px", color: "gray" }}>
+                  (카드사 심사용)
+                </Typography>
               </InputLabel>
               <TextField
-                id="testPw"
+                id="testPassword"
                 label="가맹점 비밀번호"
                 size="small"
-                error={!!errors.testPw}
-                helperText={errors.testPw ? errors.testPw.message : ""}
-                {...register("testPw", {
+                sx={{ width: 250 }}
+                error={!!errors.testPassword}
+                {...register("testPassword", {
                   required: "가맹점 IP 는 필수값 입니다.",
-                  pattern: {
-                    // 영 + 숫자 + 특수문자 min, max 설정
-                  },
                 })}
                 InputProps={{
                   endAdornment: (
@@ -319,6 +351,11 @@ const Step2 = ({ setCurrentStepProp }) => {
                   ),
                 }}
               />
+              {errors.testPassword && (
+                <span className="errorMessage">
+                  {errors.testPassword.message}
+                </span>
+              )}
             </Stack>
           </Stack>
 
@@ -326,7 +363,7 @@ const Step2 = ({ setCurrentStepProp }) => {
           <Stack
             direction="row"
             spacing={3}
-            sx={{ justifyContent: "center", mt: 5 }}
+            sx={{ justifyContent: "center", mt: 3 }}
           >
             <Button type="submit" variant="outlined" onClick={onClick} disabled>
               {"<"}이전
@@ -344,8 +381,7 @@ const Step2 = ({ setCurrentStepProp }) => {
             <Button
               type="submit"
               variant="outlined"
-              disabled={!isValid || !validBusiness()}
-              onClick={onSubmit}
+              disabled={!isValid || !validBusiness() || !validStatus()}
             >
               다음 {">"}
             </Button>
@@ -361,6 +397,11 @@ const Step2 = ({ setCurrentStepProp }) => {
         }
         .MuiStack-root css-ymblet-MuiStack-root {
           height: 0;
+        }
+        .errorMessage {
+          color: #d94452;
+          margin-left: 10px;
+          font-size: 12px;
         }
       `}</style>
     </>
