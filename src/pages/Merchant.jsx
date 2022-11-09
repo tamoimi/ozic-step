@@ -11,13 +11,13 @@ const Merchant = () => {
   const [currentStep, setCurrentStep] = useState(1);
 
   return (
-    <Grid container>
+    <Grid container >
       {/* stepper activeStep은 0부터 시작하기 때문에 => 현재스텝 -1 */}
       <StepHeader currentStep={currentStep - 1} />
 
       {/* 임시로  step2 미리보기 해놓음 나중에 step1 로 다시 바꾸기 */}
       <Grid container>
-        {currentStep === 1 && <Step1 setCurrentStepProp={setCurrentStep} />}
+        {currentStep === 1 && <Step3 setCurrentStepProp={setCurrentStep} />}
         {currentStep === 2 && <Step2 setCurrentStepProp={setCurrentStep} />}
         {currentStep === 3 && <Step3 setCurrentStepProp={setCurrentStep} />}
         {currentStep === 4 && <Step4 setCurrentStepProp={setCurrentStep} />}
