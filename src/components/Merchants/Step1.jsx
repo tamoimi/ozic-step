@@ -36,7 +36,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
 
   const action = (
     <>
-      <Button color="primary" size="small" onClick={snackBarClose}>
+      <Button size="small" onClick={snackBarClose}>
         닫기
       </Button>
       <IconButton size="small" onClick={snackBarClose}>
@@ -70,18 +70,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
     console.log("step1다음으로 클릭 됨");
     // 다음단계로 클릭했을 때 한페이지씩 이동
     setCurrentStepProp((prev) => prev + 1);
-    // 다음단계에서 이전단계로 돌아왔을때 입력된 데이터값 남겨두기
-    // setDataProp((prev) => ({
-    //   ...prev,
-    //   mallName: data.mallName,
-    //   businessType: data.businessType,
-    //   registrationNumber: data.registrationNumber,
-    //   postCode: data.postCode,
-    //   mallAddress: data.mallAddress,
-    //   detailAddress: data.detailAddress,
-    //   phone: data.phone,
-    //   fax: data.fax,
-    // }));
+    console.log(data);
   };
 
   const openPostCodeModal = () => {
@@ -89,25 +78,10 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
   };
 
   // 인풋에 검색된 주소값 입력
-  // id랑
   const PostCodeHandler = (data) => {
     setValue("postCode", data.zonecode);
     setValue("mallAddress", data.address);
   };
-
-  // setValues로 인풋에 입력된 데이터값 적용
-  // useEffect(() => {
-  //   if (dataProp !== {}) {
-  //     setValue("mallName", dataProp.mallName);
-  //     setValue("businessType", dataProp.businessType);
-  //     setValue("registrationNumber", dataProp.registrationNumber);
-  //     setValue("postCode", dataProp.postCode);
-  //     setValue("mallAddress", dataProp.mallAddress);
-  //     setValue("detailAddress", dataProp.detailAddress);
-  //     setValue("phone", dataProp.phone);
-  //     setValue("fax", dataProp.fax);
-  //   }
-  // }, []);
 
   return (
     <>
@@ -320,7 +294,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
             <Stack direction="row" alignItems="center" height="60px">
               <InputLabel
                 htmlFor="phone"
-                sx={{ width: 150, fontWeight: "bold", color: "black" }}
+                sx={{ width: 150, fontWeight: "bold", color: "b12lack" }}
               >
                 가맹점 전화번호
               </InputLabel>
@@ -335,6 +309,10 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                   pattern: {
                     value: /^[0-9]+$/,
                     message: "숫자만 입력해 주세요.",
+                  },
+                  maxLength: {
+                    value: 12,
+                    message: "전화번호는 12자리를 이하로 입력 해주세요.",
                   },
                 })}
               />
@@ -362,6 +340,10 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                     value: /^[0-9]+$/,
                     message: "숫자만 입력해 주세요.",
                   },
+                  maxLength: {
+                    value: 12,
+                    message: "전화번호는 12자리를 이하로 입력 해주세요.",
+                  },
                 })}
               />
               {errors.fax && (
@@ -373,7 +355,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
           <Stack
             direction="row"
             spacing={3}
-            sx={{ marginTop: 5, justifyContent: "center" }}
+            sx={{ mt: 3, justifyContent: "center" }}
           >
             <Button
               type="button"
@@ -392,7 +374,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
               <Alert
                 onClose={snackBarClose}
                 severity="success"
-                sx={{ width: "100%", background: "#f2f2f2" }}
+                sx={{ width: "100%" }}
               >
                 임시저장이 완료 되었습니다.
               </Alert>
