@@ -47,8 +47,8 @@ export const FormSample = () => {
             boxSizing: "border-box",
           }}
         >
-          <Stack direction="row" spacing={3}>
-            <Navigation />
+          <Stack direction="row">
+            <Navigation/>
             <Merchant />
           </Stack>
         </Box>
