@@ -6,6 +6,8 @@ import Merchant from "./pages/Merchant";
 import CssBaseline from "@mui/material/CssBaseline";
 import Stack from "@mui/material/Stack";
 import { Navigation } from "./components/Navigation";
+import { Route, Routes } from "react-router-dom";
+import FranchiseesList from "./pages/MerchantsList";
 
 const theme = createTheme({
   palette: {
@@ -48,8 +50,12 @@ export const FormSample = () => {
           }}
         >
           <Stack direction="row">
-            <Navigation/>
-            <Merchant />
+            <Navigation />
+            {/* <Merchant /> */}
+            <Routes>
+              <Route path="/" exact element={<Merchant />} />
+              <Route path="/FranchiseesList" element={<FranchiseesList />} />
+            </Routes>
           </Stack>
         </Box>
       </ThemeProvider>

@@ -168,7 +168,7 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
               </InputLabel>
 
               <TextField
-                placeholder="등록번호 10자리 입력해주세요."
+                placeholder="등록번호 10자리를 입력해주세요."
                 label="사업자등록번호"
                 size="small"
                 sx={{ width: 250 }}
@@ -179,6 +179,10 @@ const Step1 = ({ setCurrentStepProp, dataProp, setDataProp }) => {
                     message: "숫자만 입력해 주세요.",
                   },
                   maxLength: {
+                    value: 10,
+                    message: "사업자등록번호 10자리를 입력해주세요.",
+                  },
+                  minLength: {
                     value: 10,
                     message: "사업자등록번호 10자리를 입력해주세요.",
                   },
